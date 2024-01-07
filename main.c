@@ -70,6 +70,14 @@ static void emu_update_vblk_interrupts(vm_t *vm)
 }
 #endif
 
+/* 
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+    這邊加入新的IO設備
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+ */
+
 static void mem_load(vm_t *vm, uint32_t addr, uint8_t width, uint32_t *value)
 {
     emu_state_t *data = (emu_state_t *) vm->priv;
@@ -104,6 +112,13 @@ static void mem_load(vm_t *vm, uint32_t addr, uint8_t width, uint32_t *value)
             emu_update_vblk_interrupts(vm);
             return;
 #endif
+/* 
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+    這邊加入新的IO設備
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+ */
         }
     }
     vm_set_exception(vm, RV_EXC_LOAD_FAULT, vm->exc_val);
@@ -143,6 +158,13 @@ static void mem_store(vm_t *vm, uint32_t addr, uint8_t width, uint32_t value)
             emu_update_vblk_interrupts(vm);
             return;
 #endif
+/* 
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+    這邊加入新的IO設備
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+ */
         }
     }
     vm_set_exception(vm, RV_EXC_STORE_FAULT, vm->exc_val);
@@ -422,6 +444,13 @@ static int semu_start(int argc, char **argv)
     emu.vblk.ram = emu.ram;
     emu.disk = virtio_blk_init(&(emu.vblk), disk_file);
 #endif
+/* 
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+    這邊加入新的IO設備
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+ */
 
     /* Emulate */
     uint32_t peripheral_update_ctr = 0;
@@ -443,6 +472,14 @@ static int semu_start(int argc, char **argv)
             if (emu.vblk.InterruptStatus)
                 emu_update_vblk_interrupts(&vm);
 #endif
+
+/* 
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+    這邊加入新的IO設備
+ * +++++++++++++++++++++++
+ * +++++++++++++++++++++++
+ */
         }
 
         if (vm.insn_count_hi > emu.timer_hi ||

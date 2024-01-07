@@ -36,6 +36,13 @@ ifeq ($(call has, VIRTIONET), 1)
     OBJS_EXTRA += virtio-net.o
 endif
 
+# +++++++++++++++++++++++
+# +++++++++++++++++++++++
+#    這邊加入新的IO設備
+# +++++++++++++++++++++++
+# +++++++++++++++++++++++
+
+
 BIN = semu
 all: $(BIN) minimal.dtb
 
