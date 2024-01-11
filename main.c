@@ -487,7 +487,6 @@ static int semu_start(int argc, char **argv)
                 emu_update_rtc_interrupts(&vm);
 /* +++++++++++++新加的IO設備++++++++++++++++ */
 /* ++++++++++++++++++++++++++++++++++++++++ */
- */
         }
 
         if (vm.insn_count_hi > emu.timer_hi ||

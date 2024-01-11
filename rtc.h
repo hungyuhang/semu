@@ -12,6 +12,9 @@
 #define IRQ_RTC_BIT (1 << IRQ_RTC)
 #include <stdint.h>
 
+typedef struct {
+    uint32_t InterruptStatus;
+} rtc_state;
 /*
  * LupIO-RTC device interface
  */
@@ -37,6 +40,3 @@ void lupio_rtc_reg_write(rtc_state *rtcState,
                             uint8_t *value);
 #endif /* RTC_H */
 
-typedef struct {
-    uint32_t InterruptStatus;
-} rtc_state;
