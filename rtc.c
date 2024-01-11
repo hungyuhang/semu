@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <inttypes.h>
 #include <time.h>
+#include <stdio.h>
 
 #include "riscv_private.h"
 #include "riscv.h"
@@ -55,7 +56,7 @@ struct iomem_dev_ops {
 
 
 void lupio_rtc_read(vm_t *vm,
-                    rtc_state *rtcState,
+                    rtc_states *rtcState,
                     uint32_t addr,
                     uint8_t width,
                     uint32_t *value)
@@ -75,7 +76,7 @@ void lupio_rtc_read(vm_t *vm,
     }
 }
 
-uint64_t lupio_rtc_reg_read(rtc_state *rtcState, 
+uint64_t lupio_rtc_reg_read(rtc_states *rtcState, 
                             uint32_t offset, 
                             uint8_t *value)
 {
@@ -131,7 +132,7 @@ uint64_t lupio_rtc_reg_read(rtc_state *rtcState,
 }
 
 void lupio_rtc_write(vm_t *vm,
-                    rtc_state *rtcState,
+                    rtc_states *rtcState,
                     uint32_t addr,
                     uint8_t width,
                     uint32_t *value)
@@ -150,7 +151,7 @@ void lupio_rtc_write(vm_t *vm,
     }
 }
 
-void lupio_rtc_reg_write(rtc_state *rtcState, 
+void lupio_rtc_reg_write(rtc_states *rtcState, 
                             uint32_t offset, 
                             uint8_t *value)
 {
