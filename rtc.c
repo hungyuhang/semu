@@ -67,6 +67,7 @@ void lupio_rtc_read(vm_t *vm,
     case RV_MEM_LBU:
         lupio_rtc_reg_read(rtcState, addr, &u8value);
         *value = (uint32_t) u8value;
+        break;
     case RV_MEM_LB:
     case RV_MEM_LHU:
     case RV_MEM_LH:
@@ -82,7 +83,7 @@ uint64_t lupio_rtc_reg_read(rtc_states *rtcState,
                             uint32_t offset, 
                             uint8_t *value)
 {
-    uint32_t val = 0;
+    // uint32_t val = 0;
     time_t time_sec;
     struct tm time_bd;
     char buffer[256];
@@ -93,7 +94,7 @@ uint64_t lupio_rtc_reg_read(rtc_states *rtcState,
     gmtime_r(&time_sec, &time_bd);
 
     strftime(buffer, 256, "%c", &time_bd);
-    dbg_more("%s: read time = %s", __func__, buffer);
+    // dbg_more("%s: read time = %s", __func__, buffer);
 
 
     switch(offset) {
