@@ -37,22 +37,22 @@ enum {
 /*
  * Memory accesses
  */
-enum iomem_size_log2 {
-    IOMEM_1BYTE_SIZE_LOG2 = 0,
-    IOMEM_2BYTE_SIZE_LOG2 = 1,
-    IOMEM_4BYTE_SIZE_LOG2 = 2,
-    IOMEM_8BYTE_SIZE_LOG2 = 3
-};
+// enum iomem_size_log2 {
+//     IOMEM_1BYTE_SIZE_LOG2 = 0,
+//     IOMEM_2BYTE_SIZE_LOG2 = 1,
+//     IOMEM_4BYTE_SIZE_LOG2 = 2,
+//     IOMEM_8BYTE_SIZE_LOG2 = 3
+// };
 
 /* I/O devices */
-#define IOMEM_DEV_SIZE8  (1 << IOMEM_1BYTE_SIZE_LOG2)
-struct iomem_dev_ops {
-    void (*write)(void *dev, phys_addr_t offset, uint64_t val,
-                  enum iomem_size_log2 size_log2);
-    uint64_t (*read)(void *dev, phys_addr_t offset,
-                     enum iomem_size_log2 size_log2);
-    int flags;
-};
+// #define IOMEM_DEV_SIZE8  (1 << IOMEM_1BYTE_SIZE_LOG2)
+// struct iomem_dev_ops {
+//     void (*write)(void *dev, phys_addr_t offset, uint64_t val,
+//                   enum iomem_size_log2 size_log2);
+//     uint64_t (*read)(void *dev, phys_addr_t offset,
+//                      enum iomem_size_log2 size_log2);
+//     int flags;
+// };
 
 
 void lupio_rtc_read(vm_t *vm,
@@ -126,7 +126,7 @@ uint64_t lupio_rtc_reg_read(rtc_states *rtcState,
             return true;
 
         default:
-            printf("%s: invalid read access at offset = " , offset);
+            printf("%d: invalid read access at offset = " , offset);
             return true;
     }
 
@@ -137,13 +137,11 @@ void lupio_rtc_write(vm_t *vm,
                     rtc_states *rtcState,
                     uint32_t addr,
                     uint8_t width,
-                    uint32_t *value)
+                    uint32_t value)
 {
-    uint8_t u8value;
     switch (width) {
     case RV_MEM_SB:
-        lupio_rtc_reg_write(rtcState, addr, &u8value);
-        *value = (uint32_t) u8value;
+        lupio_rtc_reg_write(rtcState, addr, value);
         return;
     case RV_MEM_SW:
     case RV_MEM_SH:
@@ -157,21 +155,21 @@ void lupio_rtc_write(vm_t *vm,
 
 void lupio_rtc_reg_write(rtc_states *rtcState, 
                             uint32_t offset, 
-                            uint8_t *value)
+                            uint8_t value)
 {
-    
+    return;
 }
 
 
-static struct iomem_dev_ops lupio_rtc_ops = {
-    .read = lupio_rtc_reg_read,
-    .write = lupio_rtc_write,
-    .flags = IOMEM_DEV_SIZE8,
-};
+// static struct iomem_dev_ops lupio_rtc_ops = {
+//     .read = lupio_rtc_reg_read,
+//     .write = lupio_rtc_write,
+//     .flags = IOMEM_DEV_SIZE8,
+// };
 
-void lupio_rtc_init(phys_addr_t base, phys_addr_t size)
-{
-    assert(size >= LUPIO_RTC_OFFSET_MAX);
+// void lupio_rtc_init(phys_addr_t base, phys_addr_t size)
+// {
+//     assert(size >= LUPIO_RTC_OFFSET_MAX);
 
-    iomem_register_device(base, size, NULL, &lupio_rtc_ops);
-}
+//     iomem_register_device(base, size, NULL, &lupio_rtc_ops);
+// }

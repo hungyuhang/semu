@@ -32,9 +32,9 @@ void lupio_rtc_write(vm_t *vm,
                     rtc_states *rtcState,
                     uint32_t addr,
                     uint8_t width,
-                    uint32_t *value);
+                    uint32_t value);
 void lupio_rtc_reg_write(rtc_states *rtcState, 
                             uint32_t offset, 
-                            uint8_t *value);
+                            uint8_t value);
 #endif /* RTC_H */
 
