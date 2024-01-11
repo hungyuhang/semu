@@ -170,7 +170,7 @@ static void mem_store(vm_t *vm, uint32_t addr, uint8_t width, uint32_t value)
 /* ++++++++++++++++++++++++++++++++++++++++ */
 /* +++++++++++++新加的IO設備++++++++++++++++ */
          case 0x43: /* realtime-clock */
-            lupio_rtc_write(vm, &data->vblk, addr & 0xFFFFF, width, value);
+            lupio_rtc_write(vm, &data->lrtc, addr & 0xFFFFF, width, value);
             emu_update_rtc_interrupts(vm);
             return;
 /* +++++++++++++新加的IO設備++++++++++++++++ */

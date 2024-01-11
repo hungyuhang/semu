@@ -61,10 +61,12 @@ void lupio_rtc_read(vm_t *vm,
                     uint8_t width,
                     uint32_t *value)
 {
+    uint8_t u8value;
     switch (width) {
     case RV_MEM_LW:
     case RV_MEM_LBU:
-        lupio_rtc_reg_read(rtcState, addr, value);
+        lupio_rtc_reg_read(rtcState, addr, &u8value);
+        *value = (uint32_t) u8value;
     case RV_MEM_LB:
     case RV_MEM_LHU:
     case RV_MEM_LH:
@@ -137,10 +139,12 @@ void lupio_rtc_write(vm_t *vm,
                     uint8_t width,
                     uint32_t *value)
 {
+    uint8_t u8value;
     switch (width) {
     case RV_MEM_SB:
-        lupio_rtc_reg_write(rtcState, addr, value);
-        break;
+        lupio_rtc_reg_write(rtcState, addr, &u8value);
+        *value = (uint32_t) u8value;
+        return;
     case RV_MEM_SW:
     case RV_MEM_SH:
         vm_set_exception(vm, RV_EXC_STORE_MISALIGN, vm->exc_val);
