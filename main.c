@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "device.h"
+#include "rtc.h"
 #include "riscv.h"
 #include "riscv_private.h"
 
@@ -70,13 +71,20 @@ static void emu_update_vblk_interrupts(vm_t *vm)
 }
 #endif
 
-/* 
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
-    這邊加入新的IO設備
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
- */
+/* ++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+static void emu_update_rtc_interrupts(vm_t *vm)
+{
+    emu_state_t *data = (emu_state_t *) vm->priv;
+    if (data->lrtc.InterruptStatus)
+        data->plic.active |= IRQ_RTC_BIT;
+    else
+        data->plic.active &= ~IRQ_RTC_BIT;
+    plic_update_interrupts(vm, &data->plic);
+}
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++++++++ */
+
 
 static void mem_load(vm_t *vm, uint32_t addr, uint8_t width, uint32_t *value)
 {
@@ -112,13 +120,14 @@ static void mem_load(vm_t *vm, uint32_t addr, uint8_t width, uint32_t *value)
             emu_update_vblk_interrupts(vm);
             return;
 #endif
-/* 
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
-    這邊加入新的IO設備
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
- */
+/* ++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+        case 0x43: /* rtc */
+            lupio_rtc_read(vm, &data->lrtc, addr & 0xFFFFF, width, value);
+            emu_update_rtc_interrupts(vm);
+            return;
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++++++++ */
         }
     }
     vm_set_exception(vm, RV_EXC_LOAD_FAULT, vm->exc_val);
@@ -158,13 +167,14 @@ static void mem_store(vm_t *vm, uint32_t addr, uint8_t width, uint32_t value)
             emu_update_vblk_interrupts(vm);
             return;
 #endif
-/* 
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
-    這邊加入新的IO設備
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
- */
+/* ++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+         case 0x43: /* realtime-clock */
+            lupio_rtc_write(vm, &data->vblk, addr & 0xFFFFF, width, value);
+            emu_update_rtc_interrupts(vm);
+            return;
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++++++++ */
         }
     }
     vm_set_exception(vm, RV_EXC_STORE_FAULT, vm->exc_val);
@@ -444,13 +454,11 @@ static int semu_start(int argc, char **argv)
     emu.vblk.ram = emu.ram;
     emu.disk = virtio_blk_init(&(emu.vblk), disk_file);
 #endif
-/* 
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
-    這邊加入新的IO設備
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
- */
+/* ++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+/*     lupio_rtc_init(0x4300000, 0x1000);   */
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++++++++ */
 
     /* Emulate */
     uint32_t peripheral_update_ctr = 0;
@@ -473,12 +481,12 @@ static int semu_start(int argc, char **argv)
                 emu_update_vblk_interrupts(&vm);
 #endif
 
-/* 
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
-    這邊加入新的IO設備
- * +++++++++++++++++++++++
- * +++++++++++++++++++++++
+/* ++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+            if (emu.lrtc.InterruptStatus)
+                emu_update_rtc_interrupts(&vm);
+/* +++++++++++++新加的IO設備++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++++++++ */
  */
         }
 

@@ -170,7 +170,9 @@ void virtio_blk_write(vm_t *vm,
 
 uint32_t *virtio_blk_init(virtio_blk_state_t *vblk, char *disk_file);
 #endif /* SEMU_HAS(VIRTIOBLK) */
-
+typedef struct {
+    uint32_t InterruptStatus;
+} rtc_states;
 /* memory mapping */
 
 typedef struct {
@@ -185,5 +187,6 @@ typedef struct {
 #if SEMU_HAS(VIRTIOBLK)
     virtio_blk_state_t vblk;
 #endif
+    rtc_states lrtc;
     uint32_t timer_lo, timer_hi;
 } emu_state_t;
