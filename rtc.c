@@ -62,13 +62,18 @@ void lupio_rtc_read(vm_t *vm,
                     uint32_t *value)
 {
     uint8_t u8value;
+    int32_t i32value;
     switch (width) {
-    case RV_MEM_LW:
     case RV_MEM_LBU:
         lupio_rtc_reg_read(rtcState, addr, &u8value);
         *value = (uint32_t) u8value;
         break;
     case RV_MEM_LB:
+        lupio_rtc_reg_read(rtcState, addr, &u8value);
+        i32value = (int32_t) (*((int8_t *) &u8value)); // do sign-extension
+        *value = *((uint32_t *) &i32value);
+        break;
+    case RV_MEM_LW:
     case RV_MEM_LHU:
     case RV_MEM_LH:
         vm_set_exception(vm, RV_EXC_LOAD_MISALIGN, vm->exc_val);
