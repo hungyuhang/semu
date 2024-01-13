@@ -6,5 +6,6 @@ semu
 # Linux-specific
 *.dtb
 Image
+Image_rtc_feature
 ext4.img
 rootfs.cpio

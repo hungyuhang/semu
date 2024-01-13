@@ -7,7 +7,7 @@ COMMON_URL = https://github.com/hungyuhang/semu/raw/blob
 
 # kernel
 KERNEL_DATA_URL = $(COMMON_URL)/Image_rtc_feature.bz2
-KERNEL_DATA = Image
+KERNEL_DATA = Image_rtc_feature
 KERNEL_DATA_SHA1 = 9d9a216d3bd283a30fb9dafd8096ce598c481e21
 
 # initrd
